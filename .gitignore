@@ -1,4 +1,4 @@
 node_modules/
 dist/
-.impeccable/
-.visual-check/
+.DS_Store
+npm-debug.log*

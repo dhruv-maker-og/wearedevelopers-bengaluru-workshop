@@ -1,71 +1,58 @@
-# WeAreDevelopers Bengaluru workshop portal
+# Build with Copilot — workshop portal
 
-A public, dependency-light GitHub Pages portal for the 25 November 2026 GitHub Copilot workshop. The attendee surface is static HTML, CSS, and JavaScript; development dependencies are used only to generate and verify QR assets and run checks.
+Public, dependency-light setup guide for the 25 November 2026 WeAreDevelopers
+Bengaluru workshop. It is optimized for attendee phones and laptops as well as
+a facilitator projector.
 
-## Public URL
+## Canonical URL
 
-**Portal:** https://dhruv-maker-og.github.io/wearedevelopers-bengaluru-workshop/
+https://dhruv-maker-og.github.io/wearedevelopers-bengaluru-workshop/
 
-## Local use
+## Develop
+
+Requirements: Node.js 20 or newer.
 
 ```sh
 npm ci
-npm run qr:generate
-npm run check
+npm run build
+npm run test
+npm run smoke
 ```
 
-Serve `dist/` with any static server for a local preview. The checks build the site, validate the content and accessibility hooks, decode every generated PNG QR, and run an HTTP smoke test.
+`npm run check` runs the full local build, URL/QR tests, and static serving
+smoke test. The deployable site is emitted to `dist/`.
 
-## Change an event URL
+## Source of truth
 
-All organizer-controlled destinations are centralized and labeled in `config.js`.
+Every destination is defined once in `event.config.json`. `scripts/build.mjs`
+validates the configured HTTPS URLs, emits the browser configuration, and
+generates the four committed-by-artifact QR images. The runtime page has no CDN
+or framework dependency.
 
-1. Replace the required URL in `config.js`.
-2. Run `npm ci` once, then `npm run qr:generate`.
-3. Run `npm run check`.
-4. Commit the updated `config.js` and generated PNG/SVG assets.
-5. Push to `main` and confirm the GitHub Pages workflow succeeds.
+Edit the config rather than changing a URL in `src/index.html`. Keep the JSON
+keys stable because the page, copy buttons, QR generation, and tests consume
+them.
 
-The workshop join URL contains an event token and is intentionally public because attendees must scan it. Do not remove, mask, or replace it with a shorter undocumented destination. When organizers issue a new token-bearing URL, regenerate `workshop-join.png` and `workshop-join.svg` with the process above so the visible scan code and direct link cannot drift.
+## Rotate the workshop token
 
-## Attendee route
+1. Obtain the new workshop join URL from the organizer.
+2. Replace only the `join` value in `event.config.json`.
+3. Run `npm run check`. QR decode tests must resolve to the new URL.
+4. Commit and push to `main`; the Pages workflow builds and deploys `dist/`.
+5. Scan the live join QR with a separate device and verify the expected event.
 
-1. Use a personal GitHub.com account. Enterprise Managed User (EMU) accounts are unsupported by the join flow.
-2. Install and sign in to the Copilot app, then verify **GitHub Copilot Enterprise is active for your account** from the user icon > **Copilot settings**.
-3. In the app, use **+** next to Sessions > **Add GitHub repository** > browse or search > **Add**. If necessary, choose **Clone repository** for a URL fallback.
-4. Start **+ > select repository > This computer > New worktree > Interactive**, then enter the lab prompt or instructions supplied by the chosen repository README.
+Do not extend the token elsewhere. The token is an expiring bearer-style event
+credential and should not be copied into chat, screenshots, issues, or
+participant documentation.
 
-Do not invent lab objectives or prompts. The portal deliberately directs attendees to each lab repository's README.
+## Event operations
 
-## Day-of facilitator preflight
+See [`FACILITATOR.md`](FACILITATOR.md) for the 10-minute preflight, staffing plan,
+and incident lanes.
 
-Run this from the venue network and at least one attendee-like personal account 30–60 minutes before doors open:
+## Content boundaries
 
-- Confirm the canonical portal, join link, organization, primary repositories, and both alternates open without enterprise SSO or stale-session surprises.
-- Scan the portal, workshop join, and alternate-repository QR assets from a phone. Confirm each lands on the destination documented in `config.js`.
-- Check the Copilot app installer and sign-in path on a Windows test machine.
-- Confirm the test personal account shows **GitHub Copilot Enterprise is active for your account**.
-- Verify a repository can be added by search and, separately, cloned by URL into a new worktree and Interactive session.
-- Project the portal at 1920×1080 and open it at a phone-width viewport. The QR panels, navigation, and help matrix must remain readable.
-- Confirm the public-content warning is visible and remind participants not to upload confidential, proprietary, personal, or regulated content.
-- Keep the exact error-help desk route available. Anyone with EMU access, a missing entitlement, an unfamiliar organization grant, or an access error should stop and escalate.
-
-## Staffing model
-
-For 50–100 attendees, staff the room with **one lead facilitator plus 3–5 helpers**.
-
-- **Lead facilitator:** owns the stage, pacing, approved prompts, and go/no-go decisions.
-- **Account helper:** resolves personal account, join-flow, and Copilot Enterprise entitlement questions.
-- **App/helper:** handles installation, sign-in, repository add, URL clone, worktree, and Interactive-session setup.
-- **Lab helpers:** compare symptoms with repository READMEs and direct blocked participants to an approved alternate.
-- **Floater:** watches the room for stalled tables, projector visibility, and people who need privacy while an error is triaged.
-
-Keep one helper free to triage rather than assigning every helper to a fixed table. Before the session, agree which facilitator can approve use of each alternate and post the decision.
-
-## Deployment
-
-`.github/workflows/pages.yml` publishes `dist/` from pushes to `main` and can also be triggered manually. In **Settings > Pages**, the source should be **GitHub Actions**. The environment output reports the final Pages URL.
-
-## Content lifecycle and privacy
-
-This is a public workshop organization. Never put confidential content, secrets, customer data, production credentials, personal data, or regulated material in any workshop repository or prompt. The workshop organization and its content may be deleted after the event.
+The workshop organization and labs are public. Never add confidential data,
+credentials, attendee information, proprietary source, or workshop-only
+prompts to this portal. The labs and organization may be deleted after the
+event, so attendees must not use them as durable storage.
