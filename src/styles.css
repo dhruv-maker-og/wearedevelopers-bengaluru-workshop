@@ -1628,6 +1628,10 @@
       font-size: clamp(2.8rem, 12.5vw, 3.2rem);
     }
 
+    .hero h1 span:first-child {
+      font-size: 0.88em;
+    }
+
     .hero-copy {
       padding-top: 1.9rem;
       padding-bottom: 1.4rem;
