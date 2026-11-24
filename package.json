@@ -1,0 +1,26 @@
+{
+  "name": "wearedevelopers-bengaluru-workshop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public workshop portal for the WeAreDevelopers Bengaluru GitHub Copilot workshop.",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "qr:generate": "node scripts/generate-qr.js",
+    "qr:verify": "node scripts/verify-qr.js",
+    "test": "node scripts/test.js",
+    "smoke": "node scripts/smoke.js",
+    "visual": "node scripts/visual-check.js",
+    "check": "npm run build && npm run test && npm run qr:verify && npm run smoke && npm run visual"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.1",
+    "jsqr": "1.4.0",
+    "playwright-core": "^1.65.1",
+    "pngjs": "7.0.0",
+    "qrcode": "1.5.4"
+  }
+}
