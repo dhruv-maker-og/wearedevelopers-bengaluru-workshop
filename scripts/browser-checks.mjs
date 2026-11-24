@@ -27,7 +27,7 @@ const { port } = server.address();
 const browser = await chromium.launch({ headless: true });
 try {
   for (const viewport of [
-    { name: "mobile", width: 390, height: 844 },
+    { name: "mobile", width: 368, height: 844 },
     { name: "tablet", width: 768, height: 1024 },
     { name: "projector", width: 1440, height: 900 },
   ]) {
@@ -36,6 +36,14 @@ try {
     await page.goto(`http://127.0.0.1:${port}`, { waitUntil: "networkidle" });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (overflow > 1) throw new Error(`${viewport.name}: ${overflow}px horizontal overflow`);
+    await page.keyboard.press("Tab");
+    const focus = await page.evaluate(() => {
+      const active = document.activeElement;
+      return { className: active.className, outlineStyle: getComputedStyle(active).outlineStyle };
+    });
+    if (focus.className !== "skip-link" || focus.outlineStyle === "none") {
+      throw new Error(`${viewport.name}: keyboard focus is not visible from the first tab stop`);
+    }
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
     if (results.violations.length) {
       const violations = results.violations.map(({ id, impact, nodes }) =>
@@ -44,6 +52,14 @@ try {
       throw new Error(`${viewport.name}: accessibility violations: ${violations}`);
     }
     if (viewport.name === "mobile") {
+      const layout = await page.evaluate(() => ({
+        pageHeight: document.documentElement.scrollHeight,
+        heroHeight: document.querySelector(".hero").getBoundingClientRect().height,
+        qrTop: document.querySelector(".ticket-main img").getBoundingClientRect().top,
+      }));
+      if (layout.heroHeight > 1000) throw new Error(`mobile: hero is ${layout.heroHeight}px, expected <= 1000px`);
+      if (layout.qrTop > 750) throw new Error(`mobile: primary QR starts at ${layout.qrTop}px, expected <= 750px`);
+      if (layout.pageHeight > 7000) throw new Error(`mobile: page is ${layout.pageHeight}px, expected <= 7000px`);
       await page.locator(".check-control").first().click();
       await page.reload();
       if (!(await page.locator('[data-check="join"]').isChecked())) throw new Error("Checklist progress did not persist");
@@ -52,7 +68,7 @@ try {
     }
     await page.close();
     await context.close();
-    console.log(`${viewport.name}: no overflow; WCAG A/AA automated checks passed`);
+    console.log(`${viewport.name}: layout, keyboard focus, and WCAG A/AA automated checks passed`);
   }
 } finally {
   await browser.close();

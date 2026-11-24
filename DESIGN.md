@@ -47,4 +47,4 @@ The only authored entrance is the two-ticket reveal, using a short exponential e
 
 ## Responsive and print
 
-The hero stacks below 760px. Tickets remain scannable; route cards and setup steps become a single column. At projector width, the first viewport keeps the QR pair and primary join action together. Print styles remove navigation and interaction noise, keep QR credentials visible, avoid splitting actionable rows, and use an A4 portrait handout.
+Below 760px, the hero becomes an action-first sequence: compact event identity, a deliberate two-line headline, one dominant join action, then the join QR with the portal QR as a small secondary strip. The full hero remains under 1000px at 368px, and the primary QR begins within the first 750px. Route cards and setup steps become a single column while retaining required onboarding detail. At projector width, the first viewport keeps the join action and QR credential together. Print styles remove navigation and interaction noise, keep QR credentials visible, avoid splitting actionable rows, and use an A4 portrait handout.
