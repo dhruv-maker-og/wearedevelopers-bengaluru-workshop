@@ -1,58 +1,52 @@
-# Build with Copilot — workshop portal
+# WeAreDevelopers Bengaluru workshop portal
 
-Public, dependency-light setup guide for the 25 November 2026 WeAreDevelopers
-Bengaluru workshop. It is optimized for attendee phones and laptops as well as
-a facilitator projector.
+A public, static field guide for the 25 November 2026 WeAreDevelopers Bengaluru GitHub Copilot workshop. The deployed page is the room’s single source of truth for joining, app setup, lab routes, and recovery.
 
-## Canonical URL
+**Portal:** https://dhruv-maker-og.github.io/wearedevelopers-bengaluru-workshop/
 
-https://dhruv-maker-og.github.io/wearedevelopers-bengaluru-workshop/
+## Local development
 
-## Develop
+Requirements: Node.js 20+.
 
-Requirements: Node.js 20 or newer.
-
-```sh
+```bash
 npm ci
 npm run build
-npm run test
-npm run smoke
+npm run check
 ```
 
-`npm run check` runs the full local build, URL/QR tests, and static serving
-smoke test. The deployable site is emitted to `dist/`.
+`npm run build` writes the committed static output to `site/`, including all QR PNGs. `npm run smoke` performs a local asset and content smoke test. `npm run check:ui` runs responsive overflow checks and axe WCAG A/AA checks at mobile, tablet, and projector viewports.
 
-## Source of truth
+## Event URLs and join-token rotation
 
-Every destination is defined once in `event.config.json`. `scripts/build.mjs`
-validates the configured HTTPS URLs, emits the browser configuration, and
-generates the four committed-by-artifact QR images. The runtime page has no CDN
-or framework dependency.
+Every approved URL lives in [`event.config.js`](event.config.js). Edit only that file, then run:
 
-Edit the config rather than changing a URL in `src/index.html`. Keep the JSON
-keys stable because the page, copy buttons, QR generation, and tests consume
-them.
+```bash
+npm run build
+npm test
+```
 
-## Rotate the workshop token
+To rotate the expiring join token:
 
-1. Obtain the new workshop join URL from the organizer.
-2. Replace only the `join` value in `event.config.json`.
-3. Run `npm run check`. QR decode tests must resolve to the new URL.
-4. Commit and push to `main`; the Pages workflow builds and deploys `dist/`.
-5. Scan the live join QR with a separate device and verify the expected event.
+1. Replace `event.urls.join` in `event.config.js` with the complete new URL.
+2. Run `npm run build`; this regenerates the page and `site/assets/qr/join.png`.
+3. Run `npm run check`; the QR decoder test proves the PNG embeds the new URL exactly.
+4. Commit the config, generated `site/` output, and package lock.
+5. Push to `main` or merge the approved PR. The Pages workflow rebuilds, tests, and deploys.
 
-Do not extend the token elsewhere. The token is an expiring bearer-style event
-credential and should not be copied into chat, screenshots, issues, or
-participant documentation.
+Do not edit `site/` by hand. Do not publish old join URLs, screenshots, or copied QR images.
 
-## Event operations
+## Repository map
 
-See [`FACILITATOR.md`](FACILITATOR.md) for the 10-minute preflight, staffing plan,
-and incident lanes.
+- `src/index.html`: accessible static source template.
+- `src/styles.css`: local visual system, responsive layout, and print treatment.
+- `src/app.js`: checklist persistence and copy interactions.
+- `event.config.js`: authoritative event URLs and QR configuration.
+- `scripts/build.mjs`: deterministic page and QR generation.
+- `site/`: committed GitHub Pages payload.
+- `test/`: exact URL, generated QR payload, package, and source-policy tests.
+- `FACILITATOR.md`: room preflight and staffing handoff.
+- `.github/workflows/pages.yml`: test and deploy workflow.
 
-## Content boundaries
+## Deployment
 
-The workshop organization and labs are public. Never add confidential data,
-credentials, attendee information, proprietary source, or workshop-only
-prompts to this portal. The labs and organization may be deleted after the
-event, so attendees must not use them as durable storage.
+The workflow runs on pushes to `main` and deploys the `site/` directory with GitHub Pages. It installs Chromium for responsive and accessibility checks before deployment. The canonical deployed URL must respond with the final site before event use.

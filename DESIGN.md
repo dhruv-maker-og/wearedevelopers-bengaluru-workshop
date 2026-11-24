@@ -1,57 +1,50 @@
 # Design system
 
-The portal is an **event control wall**: a single operational guide that should
-still be legible when projected across a room of 50-100 developers.
+<!-- impeccable:design-schema 1 -->
 
-## Visual world
+## Direction
 
-- **Cobalt blue** carries the hero, recovery actions, and operational emphasis.
-- **Signal yellow** marks the primary join route, high-value QR stations, and
-  safe next moves.
-- **Newsprint white** is the reading surface for dense instructions.
-- **Near-black** carries hard rules, reverse-type sections, and secondary
-  actions.
-- **Signal red** is reserved for action shadows, focus rings, and the helper
-  alert.
+**Workshop field guide.** The portal behaves like an event credential and operational route sheet: crisp ink, warm paper, safety orange, signal blue, registration marks, ticket notches, and oversized working type. It is explicitly not a generic SaaS dashboard.
+
+## Color
+
+| Token | Value | Role |
+| --- | --- | --- |
+| Ink | `#111827` | Primary text and structural surface |
+| Paper | `#f7f2e8` | Main reading ground |
+| Paper deep | `#e7e0d2` | Lab-route field |
+| Safety orange | `#ff5a1f` | Join route and active progress |
+| Signal yellow | `#ffd447` | Wayfinding and identity warning |
+| Signal blue | `#1565e5` | Secondary lab route and focus |
+| White | `#fffdf8` | Ticket and working surfaces |
+
+Small text on colored backgrounds remains near-black or white and is tested for WCAG A/AA contrast.
 
 ## Type
 
-The page uses system sans-serif stacks so it works offline and has no runtime
-font request. Narrow display faces are used only for event headlines, labels,
-and controls; the regular body face is optimized for instructions. Headlines
-are bold, uppercase, and tightly set, but body copy remains normal case with a
-comfortable measure.
+- Display: local Arial Black/Arial Narrow/Impact stack, compressed, high-information weight.
+- Body and UI: local Arial/Helvetica stack for reliable rendering and projector legibility.
+- Code and repository references: Courier New only where data, paths, or exact status strings are shown.
+- No runtime font requests.
 
 ## Composition
 
-The first viewport is a thesis rather than a marketing header: the setup promise
-occupies the left, and the portal/join QR stations occupy the right. The reading
-order then moves through checklist, exact app flow, lab lanes, recovery matrix,
-and public-content boundaries.
+The opening pairs an oversized operational thesis with two physical-style QR tickets. The route navigator behaves like a taped index strip. Content follows the participant sequence: preflight, identity gate, app setup, lab choice, help matrix, and public-data boundary.
 
-Hard rules divide operational regions. Components avoid decorative nesting:
-the QR stations and lab lanes are functional objects, not general-purpose
-cards. Motion is limited to lightweight control feedback and a status toast.
+Rules and repeated notation create structure. Cards are reserved for the two lab routes and the physical QR credential, not used as the page-wide scaffold.
 
-## Responsive behavior
+## Motion
 
-- At laptop/projector widths, the hero and checklist use two operational
-  columns while the app flow remains a four-step track.
-- Below 820px, the workstreams stack in reading order and help rows become
-  labeled mobile records.
-- Below 560px, QR stations and lab lanes become single-column objects, display
-  type scales down to preserve full words, and all page edges reflow without
-  horizontal scrolling.
+The only authored entrance is the two-ticket reveal, using a short exponential ease-out. Checklist progress fills directly. Reduced-motion preferences disable both.
 
-## Accessibility
+## Interaction
 
-Semantic landmarks, headings, lists, a live progress readout, native
-checkboxes, visible focus, high contrast, a skip link, status announcements, and
-reduced-motion handling are required. QR images have destination-specific alt
-text. Every QR also has an adjacent text link or copy control.
+- Every action is a descriptive link or button.
+- Checkboxes persist only in local storage; reset is always available.
+- Copy controls announce their result in a live region and offer a fallback when Clipboard API access is unavailable.
+- Focus uses a 3px blue outline.
+- Tables scroll on small screens rather than dropping or compressing critical instructions.
 
-## Print
+## Responsive and print
 
-The print stylesheet preserves the event identity, QR codes, setup steps,
-repository flow, lab alternates, recovery matrix, and content boundaries while
-removing interactive-only chrome.
+The hero stacks below 760px. Tickets remain scannable; route cards and setup steps become a single column. At projector width, the first viewport keeps the QR pair and primary join action together. Print styles remove navigation and interaction noise, keep QR credentials visible, avoid splitting actionable rows, and use an A4 portrait handout.

@@ -1,109 +1,68 @@
-(() => {
-  const config = window.EVENT_CONFIG;
-  const storageKey = "copilot-workshop-checklist-v1";
-  const checkboxes = [...document.querySelectorAll("[data-step]")];
-  const count = document.querySelector("#progress-count");
-  const resetButton = document.querySelector("#reset-checklist");
-  const toast = document.querySelector("#toast");
-  let toastTimer;
+const storageKey = "wearedevelopers-bengaluru-2026-checklist";
+const checks = [...document.querySelectorAll("[data-check]")];
+const count = document.querySelector("#progress-count");
+const bar = document.querySelector("#progress-bar");
+const progress = document.querySelector('[role="progressbar"]');
+const toast = document.querySelector("#toast");
+let toastTimer;
 
-  if (!config) {
-    document.documentElement.dataset.configError = "true";
-    console.error("Event configuration did not load.");
-    return;
+function savedChecks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
   }
+}
 
-  document.querySelectorAll("[data-config-text]").forEach((element) => {
-    element.textContent = config[element.dataset.configText] ?? "";
-  });
-
-  document.querySelectorAll("[data-url]").forEach((link) => {
-    const url = config[link.dataset.url];
-    if (url) {
-      link.href = url;
-    } else {
-      link.removeAttribute("href");
-      link.setAttribute("aria-disabled", "true");
-    }
-  });
-
-  function announce(message) {
-    window.clearTimeout(toastTimer);
-    toast.textContent = message;
-    toast.classList.add("is-visible");
-    toastTimer = window.setTimeout(() => {
-      toast.classList.remove("is-visible");
-    }, 2600);
+function updateProgress() {
+  const completed = checks.filter((check) => check.checked).length;
+  count.textContent = completed;
+  progress.setAttribute("aria-valuenow", completed);
+  bar.style.setProperty("--progress", completed / checks.length);
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(checks.filter((check) => check.checked).map((check) => check.dataset.check)));
+  } catch {
+    // The checklist remains usable when storage is blocked.
   }
+}
 
-  function readProgress() {
+const saved = new Set(savedChecks());
+for (const check of checks) {
+  check.checked = saved.has(check.dataset.check);
+  check.addEventListener("change", updateProgress);
+}
+updateProgress();
+
+document.querySelector("#clear-progress")?.addEventListener("click", () => {
+  for (const check of checks) check.checked = false;
+  updateProgress();
+  announce("Checklist reset");
+});
+
+document.querySelectorAll("[data-copy]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const value = button.dataset.copy;
     try {
-      const stored = JSON.parse(window.localStorage.getItem(storageKey) ?? "[]");
-      return new Set(Array.isArray(stored) ? stored : []);
-    } catch (error) {
-      console.warn("Could not restore checklist progress.", error);
-      return new Set();
+      await navigator.clipboard.writeText(value);
+      announce("Copied to clipboard");
+    } catch {
+      const field = document.createElement("textarea");
+      field.value = value;
+      field.setAttribute("readonly", "");
+      field.className = "clipboard-fallback";
+      document.body.append(field);
+      field.select();
+      const copied = document.execCommand("copy");
+      field.remove();
+      announce(copied ? "Copied to clipboard" : "Copy failed. Select and copy the visible link.");
     }
-  }
-
-  function persistProgress() {
-    const completed = checkboxes.filter((item) => item.checked).map((item) => item.dataset.step);
-    try {
-      window.localStorage.setItem(storageKey, JSON.stringify(completed));
-    } catch (error) {
-      console.warn("Could not save checklist progress.", error);
-      announce("Progress could not be saved in this browser.");
-    }
-    count.textContent = String(completed.length);
-  }
-
-  const completed = readProgress();
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = completed.has(checkbox.dataset.step);
-    checkbox.addEventListener("change", persistProgress);
   });
-  persistProgress();
+});
 
-  resetButton?.addEventListener("click", () => {
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-    persistProgress();
-    announce("Checklist reset on this device.");
-  });
-
-  async function copyText(url) {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(url);
-      return;
-    }
-
-    const field = document.createElement("textarea");
-    field.value = url;
-    field.setAttribute("readonly", "");
-    field.style.position = "fixed";
-    field.style.opacity = "0";
-    document.body.append(field);
-    field.select();
-    const copied = document.execCommand("copy");
-    field.remove();
-    if (!copied) {
-      throw new Error("Browser copy command failed.");
-    }
-  }
-
-  document.querySelectorAll("[data-copy]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const url = config[button.dataset.copy];
-      if (!url) return;
-
-      try {
-        await copyText(url);
-        announce("Link copied.");
-      } catch (error) {
-        console.error("Could not copy link.", error);
-        announce("Could not copy. Open the link and copy it from the address bar.");
-      }
-    });
-  });
-})();
+function announce(message) {
+  clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 2200);
+}

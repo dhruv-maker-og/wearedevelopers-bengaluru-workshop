@@ -1,54 +1,47 @@
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import path from "node:path";
 import QRCode from "qrcode";
+import { event } from "../event.config.js";
 
-const root = resolve(import.meta.dirname, "..");
-const source = resolve(root, "src");
-const output = resolve(root, "dist");
-const config = JSON.parse(await readFile(resolve(root, "event.config.json"), "utf8"));
-
-const required = [
-  "portal",
-  "windowsApp",
-  "appDocs",
-  "join",
-  "organization",
-  "lab1",
-  "alternateLab1",
-  "lab2",
-  "alternateLab2",
-];
-
-for (const key of required) {
-  const value = config[key];
-  if (typeof value !== "string" || !value.startsWith("https://")) {
-    throw new Error(`event.config.json: ${key} must be an HTTPS URL`);
-  }
-}
+const root = process.cwd();
+const source = path.join(root, "src");
+const output = path.join(root, "site");
 
 await rm(output, { recursive: true, force: true });
-await mkdir(resolve(output, "assets"), { recursive: true });
-await cp(source, output, { recursive: true });
-await writeFile(
-  resolve(output, "event-config.js"),
-  `window.EVENT_CONFIG = Object.freeze(${JSON.stringify(config)});\n`,
-);
+await mkdir(path.join(output, "assets", "qr"), { recursive: true });
 
-const qrTargets = {
-  "portal.png": config.portal,
-  "join.png": config.join,
-  "alternate-lab-1.png": config.alternateLab1,
-  "alternate-lab-2.png": config.alternateLab2,
-};
+let html = await readFile(path.join(source, "index.html"), "utf8");
+for (const [key, value] of Object.entries(event.urls)) {
+  html = html.replaceAll(`{{${key}}}`, value);
+}
+html = html
+  .replaceAll("{{name}}", event.name)
+  .replaceAll("{{title}}", event.title)
+  .replaceAll("{{dateLabel}}", event.dateLabel);
+
+if (html.includes("{{")) {
+  throw new Error("Build output contains unresolved template values");
+}
+
+await Promise.all([
+  writeFile(path.join(output, "index.html"), html),
+  copyFile(path.join(source, "styles.css"), path.join(output, "styles.css")),
+  copyFile(path.join(source, "app.js"), path.join(output, "app.js")),
+  writeFile(
+    path.join(output, "event-config.json"),
+    `${JSON.stringify({ name: event.name, title: event.title, dateLabel: event.dateLabel, urls: event.urls }, null, 2)}\n`,
+  ),
+  copyFile(path.join(source, "assets", "favicon.svg"), path.join(output, "favicon.svg")),
+]);
 
 await Promise.all(
-  Object.entries(qrTargets).map(([name, url]) =>
-    QRCode.toFile(resolve(output, "assets", name), url, {
+  Object.entries(event.qr).map(([name, configKey]) =>
+    QRCode.toFile(path.join(output, "assets", "qr", `${name}.png`), event.urls[configKey], {
       type: "png",
-      width: 720,
-      margin: 4,
       errorCorrectionLevel: "M",
-      color: { dark: "#08111d", light: "#ffffff" },
+      margin: 3,
+      width: 520,
+      color: { dark: "#111827ff", light: "#ffffffff" },
     }),
   ),
 );

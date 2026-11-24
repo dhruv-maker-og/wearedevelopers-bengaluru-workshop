@@ -1,61 +1,46 @@
 # Facilitator handoff
 
+**Audience:** 50–100 developers  
+**Room cover:** 1 facilitator + 3–5 helpers  
+**Public source of truth:** https://dhruv-maker-og.github.io/wearedevelopers-bengaluru-workshop/
+
 ## 10-minute preflight
 
-Run this before doors open, using the same public URL attendees will use.
+1. **Minute 0–2 — Links:** Open the portal, join URL, Windows app URL, official app docs, organization, both primary repos, and both alternates. Confirm every route returns the expected public resource.
+2. **Minute 2–4 — Identity:** In a clean browser profile, check the join flow and verify the warning for personal GitHub.com accounts versus EMU identities.
+3. **Minute 4–6 — Entitlement:** On the demo Windows machine, open the user icon → Copilot settings. Confirm the exact line: `GitHub Copilot Enterprise is active for your account`.
+4. **Minute 6–8 — Add repo:** Confirm the visible flow: `+` beside Sessions → Add GitHub repository → search/add. Confirm the fallback: Clone repository. Select This computer, New worktree, Interactive, and use repo instructions.
+5. **Minute 8–9 — Lab routes:** Scan the join, portal, Alt1, and Alt2 QR codes from a phone. Confirm each primary and alternate README opens.
+6. **Minute 9–10 — Room:** Put the portal URL on the projector, place helpers across the room, and keep the blocked/help matrix open for triage.
 
-1. Open the canonical portal on a clean phone and laptop.
-2. Scan the portal and join QR codes. Confirm the join page names the correct
-   25 November Bengaluru event.
-3. Open the Windows app link and verify the download page is reachable.
-4. Sign in as a disposable personal GitHub account. Confirm:
-   `GitHub Copilot Enterprise is active for your account`.
-5. Clone one primary lab and one assigned alternate in a fresh app session.
-   Use **Sessions → Add GitHub repository → Clone repository** as the fallback
-   check.
-6. Select **This computer → New worktree → Interactive** and confirm the
-   repository README opens.
-7. Check the checklist, reload, and confirm progress persists on that device.
-8. Project the portal at room resolution. Verify QR quiet zones, headings, and
-   the blocked/help matrix remain legible.
-9. Open the page with a keyboard: follow the skip link, tab order, focus ring,
-   copy controls, and checklist controls.
-10. Check print preview and save one facilitator copy before enabling the room
-    Wi-Fi share.
+## Room roles
 
-## Staffing for 50-100 attendees
+**Facilitator**
 
-Use **3-5 helpers** plus one lead:
+- Own the projector, timing, join-token state, and room-wide announcements.
+- State once that the lab organization and repositories are public.
+- Remind the room not to add confidential content.
+- Use only repository READMEs as the lab instruction source; do not invent prompts or objectives.
 
-- **Lead (1):** owns the projector, event clock, join/access decisions, and
-  announcements.
-- **Identity/Copilot helpers (1-2):** personal-account sign-in, EMU failures,
-  entitlement verification, and app updates.
-- **Repository helpers (1-2):** app flow, clone errors, worktree mode, README
-  navigation, and alternate-lane assignment.
-- **Runner (optional):** handles seats with poor connectivity, Windows policy
-  restrictions, or users who cannot install software.
+**3–5 helpers**
 
-Do not let helpers invent lane changes independently. The lead assigns an
-alternate only when a primary lane has a capacity or access failure.
+- Split the room into equal zones; one helper owns the line from identity through entitlement.
+- Resolve issues in the portal’s symptom order: EMU, entitlement, repository search, alternate route, workspace selection.
+- If a join token is rejected, compare against the live portal before escalating; old screenshots may be stale.
+- Never move an attendee to a different lab route before checking the listed primary and alternate.
 
-## Fast triage
+## Escalation order
 
-| Symptom | Helper action |
-| --- | --- |
-| Personal account cannot join | Reopen join QR; reauthenticate the same personal identity. |
-| EMU or managed identity | Stop; attendee must use a personal GitHub account. |
-| No Enterprise-active status | Verify app and join identity match, then sign out/in once. |
-| Add-repository control missing | Sessions → Add GitHub repository → Clone repository. |
-| Clone or rate/capacity failure | Stop retries; lead assigns the matching alternate lane. |
-| App asks for session setup | This computer → New worktree → Interactive. |
-| Lab task unclear | Open that repository’s README; do not copy prompts from another lab. |
+1. Match the symptom in the portal’s blocked/help matrix.
+2. Keep the failing screen visible and compare against the exact copy on the portal.
+3. Switch from an EMU to the attendee’s personal GitHub.com account if needed.
+4. Check the entitlement state before trying repository access.
+5. Use Clone repository when search/add cannot find the repo.
+6. Move to the matching alternate route only after the primary route fails.
+7. Escalate account, token, or repeated organization-access failures to the facilitator.
 
-## Incident rules
+## Safety and closing
 
-- Never collect credentials, auth codes, secrets, or screen recordings.
-- Never paste confidential source or data into a workshop prompt or repository.
-- Treat all workshop repositories as disposable. Remind attendees they may be
-  deleted after the event.
-- If the token is rotated, update `event.config.json`, run all checks, deploy,
-  and rescan the live QR before announcing the new URL.
+- The organization and labs are public. Do not allow confidential content in code, prompts, issues, files, or discussions.
+- Workshop workspaces may be deleted. Tell participants to copy any work they need before leaving.
+- After the workshop, save the final deployed commit SHA and remove the event join token when the event window has closed if policy requires it.

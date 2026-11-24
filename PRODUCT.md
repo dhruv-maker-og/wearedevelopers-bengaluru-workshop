@@ -8,65 +8,58 @@ web
 
 ## Users
 
-Developers attending the WeAreDevelopers Bengaluru hands-on workshop, using
-Windows laptops in a room of 50-100 people. Facilitators need a fast,
-projector-readable source of truth and a recovery path for setup problems.
+Primary users are 50-100 developers attending the WeAreDevelopers Bengaluru workshop in person on 25 November 2026. They need a single fast source of truth for joining the event, preparing GitHub Copilot, choosing a lab, and recovering from common blockers.
+
+Secondary users are one facilitator and 3-5 room helpers who need a reliable preflight and escalation guide.
 
 ## Product Purpose
 
-Provide one public workshop portal that gets attendees into the workshop,
-verifies GitHub Copilot access, opens the correct lab in the GitHub Copilot app,
-and points them to the authoritative lab README.
+The portal makes workshop setup and lab selection understandable in one scan, on a phone or projected screen, without requiring participants to navigate scattered instructions.
+
+Success means every participant can reach the join link, verify their entitlement, add a repository to the GitHub Copilot app, choose a primary or alternate lab route, and find help without confidential content entering public workshop resources.
 
 ## Positioning
 
-An event-operations field guide: direct links, scannable QR codes, persisted
-setup progress, alternate capacity lanes, and troubleshooting are presented in
-the order attendees need them.
+This is an operations-first workshop control panel: one public, static page that combines exact URLs, generated QR codes, a timed preparation checklist, safe lab routes, and facilitator-ready recovery guidance.
 
 ## Operating Context
 
-The portal is used during a 15-minute setup window, with attendees viewing on
-phones and laptops while facilitators may project it. The GitHub Copilot app and
-workshop organization are public, but the workshop itself runs from a private
-join token that expires after the event.
+- Workshop date: 25 November 2026 IST.
+- Attendees use personal GitHub.com accounts and GitHub Copilot Enterprise access supplied for the workshop; Enterprise Managed Users (EMU) are not supported by this flow.
+- The workshop relies on the public GitHub Copilot app for Windows, public GitHub organizations and repositories, and a static GitHub Pages deployment.
+- The join token expires and must be rotated by updating the centralized event configuration.
+- Content must remain readable on mobile devices, projected displays, and printed facilitator notes.
 
 ## Capabilities and Constraints
 
-- Static HTML, CSS, and JavaScript with no runtime framework or CDN dependency.
-- QR assets are generated locally and committed by the build as deployment
-  artifacts.
-- All destinations come from one event configuration.
-- Personal GitHub accounts are required; Enterprise Managed Users cannot use
-  this flow.
-- Lab instructions live in each lab repository README; the portal must not
-  invent prompts or objectives.
-- Workshop repositories may be deleted after the event.
-- The portal must not contain confidential workshop content.
+- Static HTML, CSS, and JavaScript only; no runtime framework or CDN.
+- Build-time QR assets are committed for the portal, join URL, and both alternate lab routes.
+- URLs are centralized in one event configuration.
+- Progress is stored locally in the browser and is not transmitted.
+- The page includes keyboard-visible focus, reduced-motion support, accessible color contrast, and copy controls.
+- The portal links to lab READMEs and must not invent lab prompts or objectives.
+- The site is deployed publicly through GitHub Pages.
+- The workshop repositories and organizations are public. Participants must not add confidential content.
+- Workshop workspaces may be deleted after the event; participants must preserve any work they need elsewhere.
 
 ## Brand Commitments
 
-The approved destination URLs, workshop date, and public workshop organization
-are binding. The interface must be bold, editorial, and useful in mobile,
-laptop, and projector contexts.
+The portal uses the workshop's supplied name, GitHub resources, exact URLs, and operational facts. The tone is direct, welcoming, high-clarity, and practical rather than generic SaaS marketing.
 
 ## Evidence on Hand
 
-The requested portal, app, documentation, join, organization, primary lab, and
-alternate lab URLs are recorded in `event.config.json`. No attendee names,
-testimonials, lab prompts, or performance claims are available and none should
-be fabricated.
+The approved workshop plan in the implementation request provides the authoritative event name, date, URLs, setup sequence, lab routes, caveats, staffing assumptions, and deployment target.
+
+No lab README content is reproduced. The portal links to the external READMEs as the source of truth.
 
 ## Product Principles
 
-1. Make the next safe action unmistakable.
-2. Prefer authoritative links over duplicated instructions.
-3. Keep degraded and alternate lanes visible before attendees get stuck.
-4. Make every operational step usable by keyboard, touch, and print.
-5. Treat the event token and workshop content as time-limited.
+1. One scan resolves the next action.
+2. Operational clarity outranks decorative complexity.
+3. Exact links and states are more valuable than generalized instructions.
+4. Public, disposable workshop resources are explicitly labeled as such.
+5. Every critical action has a visible fallback and a human help route.
 
 ## Accessibility & Inclusion
 
-The site must provide visible focus, semantic landmarks and controls, strong
-contrast, keyboard access, reduced-motion support, readable reflow on small
-screens, and a complete print stylesheet.
+The experience must support keyboard-only navigation, visible focus, reduced motion, narrow mobile screens, projector-scale typography, print output, semantic structure, and high-contrast readable content.
