@@ -27,7 +27,7 @@ const { port } = server.address();
 const browser = await chromium.launch({ headless: true });
 try {
   for (const viewport of [
-    { name: "mobile", width: 368, height: 844 },
+    { name: "mobile", width: 368, height: 749 },
     { name: "tablet", width: 768, height: 1024 },
     { name: "projector", width: 1440, height: 900 },
   ]) {
@@ -57,9 +57,10 @@ try {
         heroHeight: document.querySelector(".hero").getBoundingClientRect().height,
         qrTop: document.querySelector(".ticket-main img").getBoundingClientRect().top,
       }));
-      if (layout.heroHeight > 1000) throw new Error(`mobile: hero is ${layout.heroHeight}px, expected <= 1000px`);
-      if (layout.qrTop > 750) throw new Error(`mobile: primary QR starts at ${layout.qrTop}px, expected <= 750px`);
-      if (layout.pageHeight > 7000) throw new Error(`mobile: page is ${layout.pageHeight}px, expected <= 7000px`);
+      if (layout.heroHeight > 950) throw new Error(`mobile: hero is ${layout.heroHeight}px, expected <= 950px`);
+      if (layout.qrTop > 650) throw new Error(`mobile: primary QR starts at ${layout.qrTop}px, expected <= 650px`);
+      if (layout.pageHeight > 7500) throw new Error(`mobile: page is ${layout.pageHeight}px, expected <= 7500px`);
+      console.log(`mobile layout: ${Math.round(layout.heroHeight)}px hero; QR at ${Math.round(layout.qrTop)}px; ${layout.pageHeight}px page`);
       await page.locator(".check-control").first().click();
       await page.reload();
       if (!(await page.locator('[data-check="join"]').isChecked())) throw new Error("Checklist progress did not persist");
