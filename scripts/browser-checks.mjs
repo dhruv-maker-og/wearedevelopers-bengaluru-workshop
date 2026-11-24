@@ -56,10 +56,17 @@ try {
         pageHeight: document.documentElement.scrollHeight,
         heroHeight: document.querySelector(".hero").getBoundingClientRect().height,
         qrTop: document.querySelector(".ticket-main img").getBoundingClientRect().top,
+        headlineClientWidth: document.querySelector("h1").clientWidth,
+        headlineScrollWidth: document.querySelector("h1").scrollWidth,
       }));
       if (layout.heroHeight > 950) throw new Error(`mobile: hero is ${layout.heroHeight}px, expected <= 950px`);
       if (layout.qrTop > 650) throw new Error(`mobile: primary QR starts at ${layout.qrTop}px, expected <= 650px`);
       if (layout.pageHeight > 7500) throw new Error(`mobile: page is ${layout.pageHeight}px, expected <= 7500px`);
+      if (layout.headlineScrollWidth > layout.headlineClientWidth + 1) {
+        throw new Error(
+          `mobile: headline overflows its box (${layout.headlineScrollWidth}px content in ${layout.headlineClientWidth}px)`,
+        );
+      }
       console.log(`mobile layout: ${Math.round(layout.heroHeight)}px hero; QR at ${Math.round(layout.qrTop)}px; ${layout.pageHeight}px page`);
       await page.locator(".check-control").first().click();
       await page.reload();
