@@ -31,6 +31,7 @@ await Promise.all([
     path.join(output, "event-config.json"),
     `${JSON.stringify({ name: event.name, title: event.title, dateLabel: event.dateLabel, urls: event.urls }, null, 2)}\n`,
   ),
+  copyFile(path.join(source, "assets", "favicon.svg"), path.join(output, "favicon.svg")),
 ]);
 
 await Promise.all(
