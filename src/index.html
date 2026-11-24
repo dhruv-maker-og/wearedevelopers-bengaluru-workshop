@@ -1,0 +1,335 @@
+<!doctype html>
+<!--
+THESIS: A live event-control wall turns setup into one visible route, refusing
+the category's generic developer landing page. OWN-WORLD: high-contrast cobalt
+fields, signal yellow, newsprint white, hard black rules, oversized condensed
+type, stamp-like controls, and scannable QR objects. STORY: arrive, join, prove
+Copilot access, add the right repository, read its README, and recover quickly.
+FIRST VIEWPORT: the event name anchors the upper left; the action-heavy title
+fills the center; two QR stations anchor the right, with "Join workshop" as the
+primary action. FORM: an editorial operations wall, a field guide rather than
+a dashboard, with the briefing flow driving a single vertical reading order.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The public setup guide and lab launcher for the WeAreDevelopers Bengaluru GitHub Copilot workshop.">
+    <meta name="theme-color" content="#1547d8">
+    <title>Build with Copilot · Bengaluru workshop portal</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="event-config.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to workshop guide</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Build with Copilot workshop home">
+        <span>Build</span>
+        <span>with</span>
+        <strong>Copilot</strong>
+      </a>
+      <nav aria-label="Workshop sections">
+        <a href="#setup">Setup</a>
+        <a href="#labs">Labs</a>
+        <a href="#help">Blocked?</a>
+      </nav>
+      <p class="event-stamp" data-config-text="event"></p>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="hero-index">Workshop portal / Bengaluru</p>
+          <h1 id="hero-title">Your first<br>task: get<br><span>unblocked.</span></h1>
+          <p class="hero-deck">Use this page for the next 15 minutes. Join the event, verify access, then open your lab in the GitHub Copilot app.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" data-url="join" target="_blank" rel="noreferrer">Join workshop <span aria-hidden="true">↗</span></a>
+            <a class="text-link" data-url="windowsApp" target="_blank" rel="noreferrer">Download for Windows</a>
+            <button class="copy-button copy-button-light" type="button" data-copy="join">Copy join link</button>
+          </div>
+        </div>
+
+        <div class="qr-board" aria-label="Quick access QR codes">
+          <article class="qr-station qr-station-portal">
+            <div class="qr-label">
+              <span class="qr-number">01</span>
+              <div>
+                <h2>This portal</h2>
+                <p>Keep the guide on your phone.</p>
+              </div>
+            </div>
+            <img src="assets/portal.png" width="720" height="720" alt="QR code for the public workshop portal">
+            <button class="copy-button" type="button" data-copy="portal">Copy portal URL</button>
+          </article>
+          <article class="qr-station qr-station-join">
+            <div class="qr-label">
+              <span class="qr-number">02</span>
+              <div>
+                <h2>Join now</h2>
+                <p>Sign in and claim your seat.</p>
+              </div>
+            </div>
+            <img src="assets/join.png" width="720" height="720" alt="QR code for joining the workshop">
+            <a class="qr-open" data-url="join" target="_blank" rel="noreferrer">Open join page <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+
+        <div class="hero-rule" aria-hidden="true">
+          <span>Join</span><span>Verify</span><span>Open lab</span><span>Read README</span>
+        </div>
+      </section>
+
+      <section class="setup-section" id="setup" aria-labelledby="setup-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="setup-title">The 15-minute setup</h2>
+            <p>Check items as you go. Progress stays on this device only.</p>
+          </div>
+          <div class="progress-readout" aria-live="polite">
+            <strong><span id="progress-count">0</span>/6</strong>
+            <span>ready</span>
+          </div>
+        </div>
+
+        <div class="checklist-layout">
+          <ol class="setup-checklist">
+            <li>
+              <label>
+                <input type="checkbox" data-step="join">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Join the workshop</strong>
+                  <span>Open the join page, sign in to GitHub, and authorize the workshop access request.</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" data-step="account">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Use a personal GitHub account</strong>
+                  <span>An Enterprise Managed User (EMU) account will not work for this workshop. Switch to your personal account before continuing.</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" data-step="install">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Install or update the GitHub Copilot app</strong>
+                  <span>Use the Windows download, launch the app, and sign in with the same personal account.</span>
+                </span>
+              </label>
+              <div class="step-actions">
+                <a data-url="windowsApp" target="_blank" rel="noreferrer">Windows app ↗</a>
+                <a data-url="appDocs" target="_blank" rel="noreferrer">App docs ↗</a>
+              </div>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" data-step="entitlement">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Verify the entitlement</strong>
+                  <span>In the app, confirm this exact status appears: <q>GitHub Copilot Enterprise is active for your account</q>.</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" data-step="repository">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Add the lab repository</strong>
+                  <span>Follow the app flow below, select the right computer and workspace mode, and enter your chosen lab URL.</span>
+                </span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" data-step="readme">
+                <span class="check-mark" aria-hidden="true"></span>
+                <span class="step-copy">
+                  <strong>Start with the lab README</strong>
+                  <span>The repository README is the source of truth for the lab objective, setup, and prompts. Do not use instructions copied from another lane.</span>
+                </span>
+              </label>
+            </li>
+          </ol>
+
+          <aside class="identity-alert" aria-labelledby="account-title">
+            <p class="alert-flag">Account gate</p>
+            <h3 id="account-title">Personal account, not EMU.</h3>
+            <p>Join links and workshop repositories are issued to individual GitHub identities. Enterprise Managed Users are blocked by policy and cannot complete this setup.</p>
+            <div class="identity-flow">
+              <span>EMU / managed</span><strong aria-hidden="true">→</strong><span>Switch account</span><strong aria-hidden="true">→</strong><span>Personal GitHub</span>
+            </div>
+            <button class="button button-dark" type="button" id="reset-checklist">Reset my checklist</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="app-flow-section" aria-labelledby="flow-title">
+        <div class="section-heading section-heading-inverse">
+          <div>
+            <h2 id="flow-title">Add the repository</h2>
+            <p>Exact app flow. If a screen differs, use the session fallback.</p>
+          </div>
+        </div>
+        <ol class="flow-track">
+          <li>
+            <span class="flow-symbol" aria-hidden="true">＋</span>
+            <div><strong>Add GitHub repo</strong><p>In the app, select the <b>+</b> control, then <b>Add GitHub repository</b>.</p></div>
+          </li>
+          <li>
+            <span class="flow-symbol" aria-hidden="true">↳</span>
+            <div><strong>Session fallback</strong><p>If <b>Add GitHub repository</b> is missing, go to <b>Sessions</b> → <b>Add GitHub repository</b>, then choose <b>Clone repository</b>.</p></div>
+          </li>
+          <li>
+            <span class="flow-symbol" aria-hidden="true">◎</span>
+            <div><strong>Choose the workspace</strong><p>Select <b>This computer</b> → <b>New worktree</b> → <b>Interactive</b>.</p></div>
+          </li>
+          <li>
+            <span class="flow-symbol" aria-hidden="true">⌘</span>
+            <div><strong>Paste the lab URL</strong><p>Paste the primary or assigned alternate repository URL, create the workspace, then follow that repository’s README.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="labs-section" id="labs" aria-labelledby="labs-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="labs-title">Choose your lane</h2>
+            <p>Start on a primary lab. Use its alternate only when a facilitator assigns it.</p>
+          </div>
+        </div>
+
+        <div class="lab-grid">
+          <article class="lab lab-one">
+            <div class="lab-title">
+              <span>Lab 1</span>
+              <h3>Tail Spin Toys</h3>
+            </div>
+            <p class="lab-instruction">Open the repository, read <strong>README.md</strong>, and use the instructions there.</p>
+            <a class="button button-dark" data-url="lab1" target="_blank" rel="noreferrer">Open primary repo <span aria-hidden="true">↗</span></a>
+            <div class="alternate-lane">
+              <div>
+                <p class="lane-label">Assigned alternate</p>
+                <h4>Sandbox lane</h4>
+                <button class="copy-button" type="button" data-copy="alternateLab1">Copy alt URL</button>
+                <a data-url="alternateLab1" target="_blank" rel="noreferrer">Open alternate repo ↗</a>
+              </div>
+              <img src="assets/alternate-lab-1.png" width="720" height="720" alt="QR code for the alternate Lab 1 repository">
+            </div>
+          </article>
+
+          <article class="lab lab-two">
+            <div class="lab-title">
+              <span>Lab 2</span>
+              <h3>Build your automation</h3>
+            </div>
+            <p class="lab-instruction">Open the repository, read <strong>README.md</strong>, and use the instructions there.</p>
+            <a class="button button-dark" data-url="lab2" target="_blank" rel="noreferrer">Open primary repo <span aria-hidden="true">↗</span></a>
+            <div class="alternate-lane">
+              <div>
+                <p class="lane-label">Assigned alternate</p>
+                <h4>Virtual Universe</h4>
+                <button class="copy-button" type="button" data-copy="alternateLab2">Copy alt URL</button>
+                <a data-url="alternateLab2" target="_blank" rel="noreferrer">Open alternate repo ↗</a>
+              </div>
+              <img src="assets/alternate-lab-2.png" width="720" height="720" alt="QR code for the alternate Lab 2 repository">
+            </div>
+          </article>
+        </div>
+
+        <div class="org-ribbon">
+          <div>
+            <strong>Where the labs live</strong>
+            <span>Public workshop organization · GitHub access required</span>
+          </div>
+          <a data-url="organization" target="_blank" rel="noreferrer">Open organization ↗</a>
+        </div>
+      </section>
+
+      <section class="help-section" id="help" aria-labelledby="help-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="help-title">Blocked? Find the next move.</h2>
+            <p>Start with the row that matches the screen in front of you.</p>
+          </div>
+        </div>
+        <div class="help-table" role="table" aria-label="Workshop blockers and actions">
+          <div class="help-row help-head" role="row">
+            <span role="columnheader">What you see</span>
+            <span role="columnheader">Do this next</span>
+            <span role="columnheader">Escalate when</span>
+          </div>
+          <div class="help-row" role="row">
+            <strong role="cell">Join page rejects access</strong>
+            <span role="cell">Sign out and sign back in with a personal GitHub account. Reopen the join QR.</span>
+            <span role="cell">You still see a policy or identity error.</span>
+          </div>
+          <div class="help-row" role="row">
+            <strong role="cell">Copilot entitlement is missing</strong>
+            <span role="cell">Verify you used the same personal account for the join page and app. Sign out and sign in again.</span>
+            <span role="cell">The exact Enterprise-active status does not appear.</span>
+          </div>
+          <div class="help-row" role="row">
+            <strong role="cell">No “Add GitHub repository” control</strong>
+            <span role="cell">Go to Sessions → Add GitHub repository → Clone repository.</span>
+            <span role="cell">The repository page still cannot open.</span>
+          </div>
+          <div class="help-row" role="row">
+            <strong role="cell">Repository clone or capacity error</strong>
+            <span role="cell">Stop retrying. A facilitator may assign the alternate lane for your lab.</span>
+            <span role="cell">Immediately—share the exact error with a helper.</span>
+          </div>
+          <div class="help-row" role="row">
+            <strong role="cell">Unsure what to do in the lab</strong>
+            <span role="cell">Open that repository’s README and return to its first step.</span>
+            <span role="cell">The README cannot be opened or is missing.</span>
+          </div>
+        </div>
+        <p class="helper-callout"><span aria-hidden="true">●</span> Raise your hand. A facilitator or one of the workshop helpers will take the exact error with you.</p>
+      </section>
+
+      <section class="boundary-section" aria-labelledby="boundaries-title">
+        <div class="section-heading section-heading-inverse">
+          <div>
+            <h2 id="boundaries-title">Keep it public. Keep it disposable.</h2>
+          </div>
+        </div>
+        <div class="boundary-grid">
+          <article>
+            <h3>No confidential content</h3>
+            <p>These workshop resources are public. Do not paste secrets, credentials, proprietary source, customer data, personal data, or other confidential material into a prompt, issue, or repository.</p>
+          </article>
+          <article>
+            <h3>Workshop content may be deleted</h3>
+            <p>Lab repositories, workspaces, and organization content can be removed after the workshop. Keep personal work elsewhere and do not treat these repositories as durable storage.</p>
+          </article>
+          <article>
+            <h3>Token is time-limited</h3>
+            <p>The join link contains an expiring workshop token. If access fails after the event, use the support route defined by the organizer instead of sharing or reusing the token.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <strong>Build with Copilot</strong>
+      <p>WeAreDevelopers · Bengaluru · 25 November 2026</p>
+      <a href="#top">Back to top ↑</a>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <noscript>
+      <div class="noscript-banner">JavaScript is disabled. The QR codes and workshop steps still work, but links and copy buttons require JavaScript. Enable it, or use a facilitator’s printed guide.</div>
+    </noscript>
+  </body>
+</html>
